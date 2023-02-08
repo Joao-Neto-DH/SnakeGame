@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foto</title>
+    <style>
+        body{
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        #playground{
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: flex-start;
+            /* column-gap: 2px; */
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* border: 1px solid #ccc; */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        #canvas{
+            /* border-right: 2px solid rgb(16, 171, 192); */
+            background-color: brown;
+        }
+        .board{
+            width: 200px;
+            padding: 10px;
+            background-color: rgb(43, 43, 43);
+            color: whitesmoke;
+            font-family: cursive;
+            font-weight: 400;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- <video id="video" controls="true"></video> -->
+    <div id="playground">
+        <canvas id="canvas" width="400" height="600"></canvas>
+        <div class="board">
+            <p>Pontuação: <strong data-score="0">0</strong></p>
+            <p>Nível: <strong data-level>1</strong></p>
+            <hr>
+            <p>Pontuações</p>
+            <ul id="scores">
+            </ul>
+        </div>
+    </div>
+
+    <script src="assets/js/canvas.js" type="application/javascript"></script>
+</body>
+</html>
