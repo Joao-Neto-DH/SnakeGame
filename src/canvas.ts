@@ -26,7 +26,7 @@ const gameConfig: GameConfig = {
 }
 
 //dados da cobra
-const sneak: {head:Point, body:Point[]} = {
+const snake: {head:Point, body:Point[]} = {
     head: {x: 0, y: 0},
     body: []
 }
@@ -41,8 +41,8 @@ let power: "attrative"|"" = "";
 const skills = {
     x: 0, y: 0,
     attrative(){
-        const sx = sneak.head.x + gameConfig.size / 2;
-        const sy = sneak.head.y + gameConfig.size / 2;
+        const sx = snake.head.x + gameConfig.size / 2;
+        const sy = snake.head.y + gameConfig.size / 2;
 
         const fx = fruit.x + gameConfig.size / 2;
         const fy = fruit.y + gameConfig.size / 2;
@@ -92,24 +92,24 @@ function drawGame() {
         //limpa
         ctx.clearRect(0,0, canvas.width, canvas.height);
         
-        drawSneak();
+        drawsnake();
 
         drawFruit();
 
         gameOver();
-        moveSneak();
+        movesnake();
     }
 }
 
-function drawSneak() {
+function drawsnake() {
     if(!ctx) return;
     
     ctx.fillStyle = "#000";
-    ctx.fillRect(sneak.head.x, sneak.head.y, gameConfig.size, gameConfig.size);
+    ctx.fillRect(snake.head.x, snake.head.y, gameConfig.size, gameConfig.size);
 
     ctx.fillStyle = "#0f0";
         ctx.strokeStyle = "#000";
-        for(const track of sneak.body){
+        for(const track of snake.body){
             let x = track.x, y = track.y;
             ctx.fillRect(x, y, gameConfig.size, gameConfig.size);
             ctx.strokeRect(x, y, gameConfig.size, gameConfig.size);
@@ -123,33 +123,33 @@ function drawFruit() {
     ctx.fillRect(fruit.x + skills.x, fruit.y + skills.y, gameConfig.size, gameConfig.size);
 }
 
-function moveSneak() {
+function movesnake() {
     const vel = gameConfig.size;
 
     if(Date.now() - gameConfig.lastUpdate > gameConfig.frame){
 
-        const lastTrack = !sneak.body.length ? {...sneak.head} : {...sneak.body[sneak.body.length - 1]};
-        moveSneakBody();
+        const lastTrack = !snake.body.length ? {...snake.head} : {...snake.body[snake.body.length - 1]};
+        movesnakeBody();
         power && skills[power]();
 
         if (dir === "X" || dir === "Xi") {
-            sneak.head.x += dir === "X" ? vel : -vel;
+            snake.head.x += dir === "X" ? vel : -vel;
         }
         else if (dir === "Y" || dir === "Yi") {
-            sneak.head.y += dir === "Y" ? vel : -vel;
+            snake.head.y += dir === "Y" ? vel : -vel;
         }
         
         const newFruitPos = {x: fruit.x + skills.x, y: fruit.y + skills.y};
 
         if(power == "attrative" && skills[power]()){
-            skills.x += (newFruitPos.x - sneak.head.x) < 0 ? 3 : -3;
-            skills.y += (newFruitPos.y - sneak.head.y) < 0 ? 3 : -3;
+            skills.x += (newFruitPos.x - snake.head.x) < 0 ? 3 : -3;
+            skills.y += (newFruitPos.y - snake.head.y) < 0 ? 3 : -3;
         }
 
 
-        if(colide(newFruitPos, sneak.head)){
+        if(colide(newFruitPos, snake.head)){
             fruit = getFruit();
-            sneak.body.push(lastTrack);
+            snake.body.push(lastTrack);
 
             skills.y = skills.x = 0;
 
@@ -161,13 +161,13 @@ function moveSneak() {
         dirChanged = false;
     }
 
-    if (sneak.head.x + gameConfig.size > canvas.width) sneak.head.x = 0;
+    if (snake.head.x + gameConfig.size > canvas.width) snake.head.x = 0;
 
-    if(sneak.head.x < 0) sneak.head.x = canvas.width - gameConfig.size;
+    if(snake.head.x < 0) snake.head.x = canvas.width - gameConfig.size;
 
-    if (sneak.head.y + gameConfig.size > canvas.height) sneak.head.y = 0;
+    if (snake.head.y + gameConfig.size > canvas.height) snake.head.y = 0;
     
-    if(sneak.head.y < 0) sneak.head.y = canvas.height - gameConfig.size;
+    if(snake.head.y < 0) snake.head.y = canvas.height - gameConfig.size;
 
     requestAnimationFrame(drawGame)
 }
@@ -183,8 +183,8 @@ function getFruit() : Point {
     let x = Math.abs(multSize(canvas.width) - gameConfig.size);
     let y = Math.abs(multSize(canvas.height) - gameConfig.size);
 
-    for (const track of sneak.body) {
-        if(colide(fruit, sneak.head) || colide(fruit, track)){
+    for (const track of snake.body) {
+        if(colide(fruit, snake.head) || colide(fruit, track)){
             x = Math.abs(multSize(canvas.width) - gameConfig.size);
             y = Math.abs(multSize(canvas.height) - gameConfig.size);
         }
@@ -203,13 +203,13 @@ function colide(obj1: Point, obj2: Point) {
     return (Math.abs(cx1 - cx2) < gameConfig.size) && (Math.abs(cy1 - cy2) < gameConfig.size);
 }
 
-function moveSneakBody() {
-    let lastTrack = {...sneak.head};
+function movesnakeBody() {
+    let lastTrack = {...snake.head};
 
-    for (let i = 0; i < sneak.body.length; i++) {
-        const temp = {...sneak.body[i]};
+    for (let i = 0; i < snake.body.length; i++) {
+        const temp = {...snake.body[i]};
 
-        sneak.body[i] = {...lastTrack};
+        snake.body[i] = {...lastTrack};
         lastTrack = {...temp};
     }
 }
@@ -231,8 +231,8 @@ function updateScore() {
 }
 
 function gameOver() {
-    for (const track of sneak.body) {
-        if(colide(track, sneak.head)){
+    for (const track of snake.body) {
+        if(colide(track, snake.head)){
             gameConfig.scores.push(Number(score.dataset.score));
             gameConfig.scores.sort((a,b)=>b - a);
             listScores.innerHTML = "";
@@ -242,8 +242,8 @@ function gameOver() {
             score.innerHTML = score.dataset.score = "0";
             lvl.innerHTML = gameConfig.level.toString();
 
-            sneak.head.y = sneak.head.x = 0;
-            sneak.body.length = 0;
+            snake.head.y = snake.head.x = 0;
+            snake.body.length = 0;
 
             fruit = getFruit();
             dir = "X";
