@@ -1,6 +1,6 @@
 "use strict";
 const score = document.querySelectorAll("[data-score]")[0];
-const lvl = document.querySelectorAll("[data-level]")[0];
+const level = document.querySelectorAll("[data-level]")[0];
 const canvas = document.getElementById("canvas");
 const listScores = document.getElementById("scores");
 const ctx = canvas.getContext("2d");
@@ -50,7 +50,7 @@ const controls = {
         (dir !== "X") && (dir = "Xi");
     }
 };
-window.addEventListener("keyup", ({ code, preventDefault }) => {
+window.addEventListener("keyup", ({ code }) => {
     if (dirChanged)
         return;
     const previousDir = dir;
@@ -85,13 +85,14 @@ function drawFruit() {
     if (!ctx)
         return;
     ctx.fillStyle = "#fc0";
-    ctx.fillRect(fruit.x + skills.x, fruit.y + skills.y, gameConfig.size, gameConfig.size);
+    ctx.fillRect(fruit.x, fruit.y, gameConfig.size, gameConfig.size);
+    // ctx.fillRect(fruit.x + skills.x, fruit.y + skills.y, gameConfig.size, gameConfig.size);
 }
 function movesnake() {
     const vel = gameConfig.size;
     if (Date.now() - gameConfig.lastUpdate > gameConfig.frame) {
         const lastTrack = !snake.body.length ? Object.assign({}, snake.head) : Object.assign({}, snake.body[snake.body.length - 1]);
-        movesnakeBody();
+        moveSnakeBody();
         power && skills[power]();
         if (dir === "X" || dir === "Xi") {
             snake.head.x += dir === "X" ? vel : -vel;
@@ -99,15 +100,15 @@ function movesnake() {
         else if (dir === "Y" || dir === "Yi") {
             snake.head.y += dir === "Y" ? vel : -vel;
         }
-        const newFruitPos = { x: fruit.x + skills.x, y: fruit.y + skills.y };
-        if (power == "attrative" && skills[power]()) {
-            skills.x += (newFruitPos.x - snake.head.x) < 0 ? 3 : -3;
-            skills.y += (newFruitPos.y - snake.head.y) < 0 ? 3 : -3;
-        }
-        if (colide(newFruitPos, snake.head)) {
+        // const newFruitPos = {x: fruit.x + skills.x, y: fruit.y + skills.y};
+        // if(power == "attrative" && skills[power]()){
+        //     skills.x += (newFruitPos.x - snake.head.x) < 0 ? 3 : -3;
+        //     skills.y += (newFruitPos.y - snake.head.y) < 0 ? 3 : -3;
+        // }
+        if (colide(fruit, snake.head)) {
             fruit = getFruit();
             snake.body.push(lastTrack);
-            skills.y = skills.x = 0;
+            // skills.y = skills.x = 0;
             updateScore();
         }
         gameConfig.lastUpdate
@@ -147,7 +148,7 @@ function colide(obj1, obj2) {
     const cy2 = obj2.y + gameConfig.size / 2;
     return (Math.abs(cx1 - cx2) < gameConfig.size) && (Math.abs(cy1 - cy2) < gameConfig.size);
 }
-function movesnakeBody() {
+function moveSnakeBody() {
     let lastTrack = Object.assign({}, snake.head);
     for (let i = 0; i < snake.body.length; i++) {
         const temp = Object.assign({}, snake.body[i]);
@@ -162,10 +163,10 @@ function updateScore() {
         if (gameConfig.level < 22) {
             gameConfig.level++;
             gameConfig.frame = 1000 / (gameConfig.level + 3);
-            lvl.innerHTML = gameConfig.level.toString();
+            level.innerHTML = gameConfig.level.toString();
         }
         else {
-            lvl.innerHTML = "MAX";
+            level.innerHTML = "MAX";
         }
     }
 }
@@ -178,7 +179,7 @@ function gameOver() {
             gameConfig.level = 1;
             gameConfig.frame = 1000 / (gameConfig.level + 3);
             score.innerHTML = score.dataset.score = "0";
-            lvl.innerHTML = gameConfig.level.toString();
+            level.innerHTML = gameConfig.level.toString();
             snake.head.y = snake.head.x = 0;
             snake.body.length = 0;
             fruit = getFruit();

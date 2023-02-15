@@ -4,23 +4,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <title>Foto</title>
     <style>
         body{
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
             background-color: rgba(0, 0, 0, 0.3);
         }
         #playground{
+            align-self: stretch;
+            display: flex;
+            /* flex-direction: row; */
+            /* align-items: stretch; */
+            justify-content: center;
+            /* column-gap: 2px; */
+
+            /* position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); */
+            /* border: 1px solid #ccc; */
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+        }
+        #playground > div {
             display: flex;
             flex-direction: row;
             align-items: stretch;
-            justify-content: flex-start;
-            /* column-gap: 2px; */
-
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            /* border: 1px solid #ccc; */
+            /* justify-content: center; */
+            align-content: center;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
         #canvas{
@@ -39,19 +52,26 @@
     </style>
 </head>
 <body>
-    <!-- <video id="video" controls="true"></video> -->
+    <header class="navbar bg-dark mb-5">
+        <div class="container">
+            <!-- <h1 class="navbar-brand text-light">Snake-Game</h1> -->
+            <p class="text-light">Use as <span class="badge bg-primary">Setas</span> para se locomover</p>
+        </div>
+        <!-- <button class="btn border-start rounded-0 ms-auto text-light">close</button> -->
+    </header>
     <div id="playground">
-        <canvas id="canvas" width="400" height="600"></canvas>
-        <div class="board">
-            <p>Pontuação: <strong data-score="0">0</strong></p>
-            <p>Nível: <strong data-level>1</strong></p>
-            <hr>
-            <p>Pontuações</p>
-            <ul id="scores">
-            </ul>
+        <div>
+            <canvas id="canvas" width="400" height="500"></canvas>
+            <div class="board">
+                <p>Pontuação: <strong data-score="0">0</strong></p>
+                <p>Nível: <strong data-level>1</strong></p>
+                <hr>
+                <p>Pontuações</p>
+                <ul id="scores">
+                </ul>
+            </div>
         </div>
     </div>
-
     <script src="assets/js/canvas.js" type="application/javascript"></script>
 </body>
 </html>
